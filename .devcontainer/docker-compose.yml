@@ -1,0 +1,8 @@
+services:
+  app:
+    image: node:20-slim   # Imagem do Node.js
+    volumes:
+      - .:/home/node/app:cached      # Mapeia o diretório do projeto para o container
+    ports:
+      - 3000:3000         # Mapeia a porta 3000 do container para o host
+    command: /bin/bash -c "while sleep 1000; do :; done" # Mantém o container rodando
