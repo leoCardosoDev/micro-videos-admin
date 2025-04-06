@@ -60,8 +60,6 @@ describe('Category Unit Tests', () => {
       expect(category.created_at).toBeInstanceOf(Date)
     })
   })
-
-
   describe('create command', () => {
     it('should create a category with default values', () => {
       const category = Category.create({
