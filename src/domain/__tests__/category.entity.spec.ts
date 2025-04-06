@@ -61,6 +61,7 @@ describe('Category Unit Tests', () => {
     })
   })
 
+
   describe('create command', () => {
     it('should create a category with default values', () => {
       const category = Category.create({
