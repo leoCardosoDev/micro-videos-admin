@@ -4,7 +4,7 @@ import { Uuid } from '../../shared/domain/value-objects/uuid.vo'
 
 type PropOrFactory<T> = T | ((index: number) => T)
 
-export class CategoryFakeBuilder<TBuild = any> {
+export class CategoryFakeBuilder<TBuild extends Category | Category[] = any> {
   // auto generated in entity
   private _category_id: PropOrFactory<Uuid> | undefined = undefined
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,7 +87,7 @@ export class CategoryFakeBuilder<TBuild = any> {
         // category.validate()
         return category
       })
-    return this.countObjs === 1 ? (categories[0] as any) : categories
+    return (this.countObjs === 1 ? categories[0] : categories) as TBuild
   }
 
   get category_id() {
