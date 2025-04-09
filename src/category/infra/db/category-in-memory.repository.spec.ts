@@ -12,7 +12,7 @@ describe('CategoryInMemoryRepository', () => {
     expect(repository).toBeDefined();
   })
   it('should apply filter correctly', async () => {
-    const items = [Category.create({ name: 'test' })];
+    const items = [Category.fake().aCategory().build()];
     const filterSpy = jest.spyOn(items, 'filter' as any)
     const itemsFilterd = await repository['applyFilter'](items, null);
     expect(filterSpy).not.toHaveBeenCalled()
@@ -21,9 +21,9 @@ describe('CategoryInMemoryRepository', () => {
 
   it('should filter item using filter parameter', async () => {
     const items = [
-      new Category({ name: 'test' }),
-      new Category({ name: 'TEST' }),
-      new Category({ name: 'fake' })
+      Category.fake().aCategory().withName('test').build(),
+      Category.fake().aCategory().withName('TEST').build(),
+      Category.fake().aCategory().withName('fake').build()
     ];
     const filterSpy = jest.spyOn(items, 'filter' as any)
     const itemsFilterd = await repository['applyFilter'](items, 'TEST');
@@ -34,9 +34,9 @@ describe('CategoryInMemoryRepository', () => {
   it('should sort by created_at when sort param is null', async () => {
     const createdAt = new Date()
     const items = [
-      new Category({ name: 'test', created_at: createdAt }),
-      new Category({ name: 'TEST', created_at: new Date(createdAt.getTime() + 1000) }),
-      new Category({ name: 'fake', created_at: new Date(createdAt.getTime() + 2000) })
+      Category.fake().aCategory().withName('test').withCreatedAt(createdAt).build(),
+      Category.fake().aCategory().withName('TEST').withCreatedAt(new Date(createdAt.getTime() + 1000)).build(),
+      Category.fake().aCategory().withName('fake').withCreatedAt(new Date(createdAt.getTime() + 2000)).build()
     ];
     const itemsSorted = await repository['applySort'](items, null, null)
     expect(itemsSorted).toStrictEqual([items[2], items[1], items[0]])
@@ -44,9 +44,9 @@ describe('CategoryInMemoryRepository', () => {
 
   it('should sort by name', async () => {
     const items = [
-      Category.create({ name: 'c' }),
-      Category.create({ name: 'b' }),
-      Category.create({ name: 'a' }),
+      Category.fake().aCategory().withName('c').build(),
+      Category.fake().aCategory().withName('b').build(),
+      Category.fake().aCategory().withName('a').build()
     ]
     let itemsSorted = await repository['applySort'](items, 'name', 'asc')
     expect(itemsSorted).toStrictEqual([items[2], items[1], items[0]])
