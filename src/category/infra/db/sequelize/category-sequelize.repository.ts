@@ -32,7 +32,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async update(entity: Category): Promise<void> {
     const id = entity.category_id.id
-    const model = this._get(id)
+    const model = await this._get(id)
     if(!model) {
       throw new NotFoundError(id, this.getEntity())
     }
@@ -47,7 +47,7 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async delete(entity_id: Uuid): Promise<void> {
     const id = entity_id.id
-    const model = this._get(id)
+    const model = await this._get(id)
     if(!model) {
       throw new NotFoundError(id, this.getEntity())
     }
@@ -56,6 +56,9 @@ export class CategorySequelizeRepository implements ICategoryRepository {
 
   async findById(entity_id: Uuid): Promise<Category | null> {
     const model = await this._get(entity_id.id);
+    if (!model) {
+      return null
+    }
     return new Category({
       category_id: new Uuid(model.category_id),
       name: model.name,
