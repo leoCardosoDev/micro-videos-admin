@@ -1,3 +1,5 @@
+import { Op } from 'sequelize';
+import { NotFoundError } from '../../../../shared/domain/erros/not.found.error';
 import { Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
 import { Category } from '../../../domain/category.entity';
 import { CategorySearchParams, CategorySearchResult, ICategoryRepository } from '../../../domain/category.repository';
@@ -28,16 +30,32 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     })))
   }
 
-  update(entity: Category): Promise<void> {
-    throw new Error('Method not implemented.');
+  async update(entity: Category): Promise<void> {
+    const id = entity.category_id.id
+    const model = this._get(id)
+    if(!model) {
+      throw new NotFoundError(id, this.getEntity())
+    }
+    await this.categoryModel.update({
+      category_id: entity.category_id.id,
+      name: entity.name,
+      description: entity.description,
+      is_active: entity.is_active,
+      created_at: entity.created_at
+    }, {where: {category_id: id}})
   }
 
-  delete(entity_id: Uuid): Promise<void> {
-    throw new Error('Method not implemented.');
+  async delete(entity_id: Uuid): Promise<void> {
+    const id = entity_id.id
+    const model = this._get(id)
+    if(!model) {
+      throw new NotFoundError(id, this.getEntity())
+    }
+    await this.categoryModel.destroy({where: {category_id: id}})
   }
 
   async findById(entity_id: Uuid): Promise<Category | null> {
-    const model = await this.categoryModel.findByPk(entity_id.id);
+    const model = await this._get(entity_id.id);
     return new Category({
       category_id: new Uuid(model.category_id),
       name: model.name,
@@ -62,8 +80,34 @@ export class CategorySequelizeRepository implements ICategoryRepository {
     return Category
   }
 
-  search(props: CategorySearchParams): Promise<CategorySearchResult> {
-    throw new Error('Method not implemented.');
+  async search(props: CategorySearchParams): Promise<CategorySearchResult> {
+    const offset = (props.page - 1) * props.per_page
+    const limit = props.per_page
+    const { rows: model, count } = await this.categoryModel.findAndCountAll({
+      ...props.filter && {
+        where: {
+          name: { [Op.like]: `%${props.filter}%` },
+        },
+        ...(props.sort && this.sortableFields.includes(props.sort)
+          ? { order: [[props.sort, props.sort_dir]] }
+          : { order: [["created_at", "desc"]] }), offset, limit
+      }
+    })
+    return new CategorySearchResult({
+      items: model.map(model => new Category({
+        category_id: new Uuid(model.category_id),
+        name: model.name,
+        description: model.description,
+        is_active: model.is_active,
+        created_at: model.created_at
+      })),
+      total: count,
+      current_page: props.page,
+      per_page: props.per_page,
+    })
   }
-  // Define the methods and properties for the CategorySequelizeRepository class
+
+  private async _get(id: string) {
+    return await this.categoryModel.findByPk(id);
+  }
 }
