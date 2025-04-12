@@ -262,4 +262,3 @@ describe('CategoryFakerBuilder Unit Tests', () => {
     })
   })
 })
-
