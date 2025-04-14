@@ -103,7 +103,56 @@ describe('CategorySequelizeRepository Integration Test', () => {
       const items = searchOutput.items.map((item) => item.toJson())
       expect(items).toMatchObject(categories.map((item) => item.toJson()))
     })
+
+    it('should order by created_at DESC when search params are null', async () => {
+      const created_at = new Date()
+      const categories = Category.fake().theCategories(16)
+        .withName((index) => `Movie ${index}`)
+        .withDescription(null)
+        .withCreatedAt((index) => new Date(created_at.getTime() + index)).build()
+      const searchOutput = await repository.search(new CategorySearchParams())
+      const items = searchOutput.items;
+      [...items].reverse().forEach((item, index) => {
+        expect(`Movie ${index}`).toBe(`${categories[index + 1].name}`)
+      })
+    })
+
+    it('should apply paginate and filter', async () => {
+      const categories = [
+        Category.fake().aCategory().withName('test').withCreatedAt(new Date(new Date().getTime() + 5000)).build(),
+        Category.fake().aCategory().withName('a').withCreatedAt(new Date(new Date().getTime() + 4000)).build(),
+        Category.fake().aCategory().withName('TEST').withCreatedAt(new Date(new Date().getTime() + 3000)).build(),
+        Category.fake().aCategory().withName('TeSt').withCreatedAt(new Date(new Date().getTime() + 2000)).build(),
+      ]
+      await repository.bulkInsert(categories)
+      let searchOutput = await repository.search(new CategorySearchParams({
+        page: 1,
+        per_page: 2,
+        filter: 'TEST',
+      }))
+      expect(searchOutput.toJSON(true)).toMatchObject(
+        new CategorySearchResult({
+          items: [categories[0], categories[2]],
+          total: 3,
+          current_page: 1,
+          per_page: 2,
+        }).toJSON(true)
+      )
+      searchOutput = await repository.search(new CategorySearchParams({
+        page: 2,
+        per_page: 2,
+        filter: 'TEST',
+      }))
+      expect(searchOutput.toJSON(true)).toMatchObject(
+        new CategorySearchResult({
+          items: [categories[3]],
+          total: 3,
+          current_page: 2,
+          per_page: 2,
+        }).toJSON(true)
+      )
+    })
+
+    
   })
 })
-
-
