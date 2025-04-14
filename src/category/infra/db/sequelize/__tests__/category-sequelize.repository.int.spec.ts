@@ -96,6 +96,12 @@ describe('CategorySequelizeRepository Integration Test', () => {
         last_page: 2,
         per_page: 15,
       })
+      searchOutput.items.forEach((item) => {
+        expect(item).toBeInstanceOf(Category)
+        expect(item.category_id).toBeInstanceOf(Uuid)
+      })
+      const items = searchOutput.items.map((item) => item.toJson())
+      expect(items).toMatchObject(categories.map((item) => item.toJson()))
     })
   })
 })
