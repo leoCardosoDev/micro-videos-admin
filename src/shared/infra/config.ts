@@ -6,7 +6,6 @@ export class Config {
 
   static db() {
     Config.readEnv()
-
     return {
       dialect: 'sqlite' as any,
       host: Config.env.DB_HOST,
@@ -18,7 +17,6 @@ export class Config {
     if (Config.env) {
       return
     }
-
     Config.env = readEnv({
       path: join(__dirname, `../../../envs/.env.${process.env.NODE_ENV}`),
     }).parsed
