@@ -1,22 +1,12 @@
-import { Sequelize } from 'sequelize-typescript';
 import { CategoryModel } from '../category.model';
 import { CategoryModelMapper } from '../category-model-mapper';
 import { EntityValidationError } from '../../../../../shared/domain/validators/validation.error';
 import { Category } from '../../../../domain/category.entity';
-import { UUID } from 'sequelize';
 import { Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { setupSequelize } from '../../../../../shared/infra/testing/helpers';
 
 describe('CategoryModelMapper Integration Test', () => {
-  let sequelize: Sequelize
-    beforeEach(async () => {
-      sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: ':memory:',
-        logging: false,
-        models: [CategoryModel],
-      })
-      await sequelize.sync({ force: true })
-    })
+  setupSequelize({ models: [CategoryModel] });
 
   it('should throws error when category is invalid', async () => {
     const model = CategoryModel.build({
