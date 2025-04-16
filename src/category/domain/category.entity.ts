@@ -59,7 +59,7 @@ export class Category extends Entity {
     this.is_active = true
   }
 
-  desactivate() {
+  deactivate() {
     this.is_active = false
   }
 
