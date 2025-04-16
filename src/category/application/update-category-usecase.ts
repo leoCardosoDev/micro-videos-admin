@@ -1,9 +1,10 @@
+import { IUseCase } from "../../shared/application/use-case.interface";
 import { NotFoundError } from "../../shared/domain/erros/not.found.error";
 import { Uuid } from "../../shared/domain/value-objects/uuid.vo";
 import { Category } from "../domain/category.entity";
 import { ICategoryRepository } from "../domain/category.repository";
 
-export class UpdateCategoryUseCase {
+export class UpdateCategoryUseCase implements IUseCase<UpdateCategoryInput, UpdateCategoryOutput> {
   constructor(private readonly categoryRepo: ICategoryRepository) {}
 
   async execute(input: UpdateCategoryInput): Promise<UpdateCategoryOutput> {
