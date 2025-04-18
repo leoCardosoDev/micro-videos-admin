@@ -11,8 +11,7 @@ export type PaginationOutput<T> = {
 export class PaginationOutputMapper {
   static toOutput<T>(
     items: T[],
-    props: Omit<SearchResult, "items">,
-  ): PaginationOutput<T> {
+    props: Omit<SearchResult, "items">): PaginationOutput<T> {
     return {
       items,
       total: props.total,
