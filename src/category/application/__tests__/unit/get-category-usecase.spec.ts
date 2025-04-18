@@ -1,4 +1,3 @@
-import { Not } from 'sequelize-typescript';
 import { InvalidUuidError, Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
 import { CategoryInMemoryRepository } from "../../../infra/db/in-memory/category-in-memory.repository";
 import { GetCategoryUsecase } from "../../get-category-usecase";
