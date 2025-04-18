@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../../../shared/domain/erros/not.found.error'
-import { InvalidUuidError, Uuid } from "../../../../shared/domain/value-objects/uuid.vo"
+import { Uuid } from "../../../../shared/domain/value-objects/uuid.vo"
 import { setupSequelize } from "../../../../shared/infra/testing/helpers"
 import { Category } from "../../../domain/category.entity"
 import { CategorySequelizeRepository } from "../../../infra/db/sequelize/category-sequelize.repository"
