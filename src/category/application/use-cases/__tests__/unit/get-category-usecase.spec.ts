@@ -1,8 +1,8 @@
-import { InvalidUuidError, Uuid } from '../../../../shared/domain/value-objects/uuid.vo';
-import { CategoryInMemoryRepository } from "../../../infra/db/in-memory/category-in-memory.repository";
+import { InvalidUuidError, Uuid } from '../../../../../shared/domain/value-objects/uuid.vo';
+import { CategoryInMemoryRepository } from "../../../../infra/db/in-memory/category-in-memory.repository";
 import { GetCategoryUsecase } from "../../get-category-usecase";
-import { NotFoundError } from '../../../../shared/domain/erros/not.found.error';
-import { Category } from '../../../domain/category.entity';
+import { NotFoundError } from '../../../../../shared/domain/erros/not.found.error';
+import { Category } from '../../../../domain/category.entity';
 
 describe('GetCategoryUseCase', () => {
   let useCase: GetCategoryUsecase
