@@ -6,7 +6,6 @@ export class Config {
 
   static db() {
     Config.readEnv();
-
     return {
       dialect: 'sqlite' as any,
       host: Config.env.DB_HOST,
@@ -28,7 +27,6 @@ export class Config {
 
   static rabbitmqUri() {
     Config.readEnv();
-
     return Config.env.RABBITMQ_URI;
   }
 
@@ -36,11 +34,9 @@ export class Config {
     if (Config.env) {
       return;
     }
-
     const { parsed } = readEnv({
       path: join(__dirname, `../../../envs/.env.${process.env.NODE_ENV}`),
     });
-
     Config.env = {
       ...parsed,
       ...process.env,
