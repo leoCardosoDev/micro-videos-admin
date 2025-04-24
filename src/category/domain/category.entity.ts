@@ -25,7 +25,6 @@ export class Category extends Entity {
   description: string | null
   is_active: boolean
   created_at: Date
-
   constructor(props: CategoryConstructorProps) {
     super()
     this.category_id = props.category_id ?? new Uuid()
